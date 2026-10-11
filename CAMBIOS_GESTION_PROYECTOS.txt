@@ -1,0 +1,1 @@
+FV360 Mobile: en Proyectos se muestran el proyecto abierto y guardado local, botones visibles para Guardar JSON, ZIP e importar JSON/ZIP. El guardado interno permanece en el almacenamiento del navegador; el JSON se comparte a Archivos o se descarga según navegador y sistema. Caché PWA actualizado.

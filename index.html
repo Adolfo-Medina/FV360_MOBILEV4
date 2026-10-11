@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#111214" />
+  <title>FV360 Studio Mobile | Levantamiento técnico</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="FV360" />
+  <meta name="application-name" content="FV360" />
+  <meta name="description" content="Visitas técnicas fotovoltaicas, fotografía 360°, canalizaciones, medidas y reportes sin conexión." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/icon-180.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="mobile.css" />
+</head>
+<body>
+<div class="app-shell">
+  <aside class="rail" aria-label="Navegación">
+    <div class="monogram">FV<span>360</span></div>
+    <button class="rail-btn selected" title="Visor 360" aria-label="Visor 360">◉</button>
+    <button class="rail-btn" title="Galería de fotos" id="railPhoto" aria-label="Galería de fotos">▧</button>
+    <button class="rail-btn" title="Trazar trayectoria" id="railDraw" aria-label="Trazar trayectoria">⌁</button>
+    <button class="rail-btn" title="Organizar reporte" id="railReport" aria-label="Organizar reporte">▦</button><button class="rail-btn" title="Ir al resumen" id="railTotals" aria-label="Ir al resumen">▤</button>
+    <div class="rail-spacer"></div>
+    <button class="rail-btn" id="railHelp" aria-label="Ayuda" title="Ayuda">?</button>
+  </aside>
+  <div class="workspace">
+    <header class="topbar">
+      <div class="brandline"><span class="circle-symbol">●</span><strong>FV360</strong><span class="divide"></span><span class="top-subtitle">FIELD SURVEY</span><span class="version">MOBILE · 01</span></div>
+      <div class="header-actions">
+        <span class="health" id="connectionStatus"><span class="health-dot"></span> LISTO PARA VISITA</span>
+        <button id="btnProjectsMobile" class="action-btn" title="Proyectos guardados en este dispositivo">▤ Proyectos</button>
+        <button id="btnImport" class="action-btn"><span>＋</span> Añadir fotos</button>
+        <button id="btnSaveJSON" class="action-btn action-primary" title="Guardar proyecto editable con fotografías">Guardar JSON</button><button id="btnSave" class="action-btn" title="Respaldo ZIP con fotografías">Guardar ZIP</button>
+      </div>
+    </header>
+    <div class="bodygrid">
+      <main class="main-area">
+        <div class="project-strip"><div class="project-label"><span class="overline">LEVANTAMIENTO ACTIVO</span><input id="projectName" value="Nuevo levantamiento" aria-label="Nombre del proyecto" /><span class="breadcrumb">/</span><input id="viewName" value="Nueva vista" aria-label="Nombre de la vista" /></div><div class="metadata"><span id="photoPixels">— × —</span><span class="meta-pill">EQUIRECTANGULAR</span></div></div>
+        <div class="toolbar" aria-label="Herramientas de trabajo">
+          <button data-tool="navigate" class="tool active" id="toolNavigate"><span class="tool-symbol">✥</span><span>Navegar 360°</span></button>
+          <button data-tool="draw" class="tool draw-tool" id="toolDraw"><span class="tool-symbol">╱</span><span>Trazar línea</span></button>
+          <button data-tool="select" class="tool" id="toolSelect"><span class="tool-symbol">⌖</span><span>Editar línea</span></button>
+          <span class="toolbar-divider"></span>
+          <button class="tool" id="btnCaptureView" title="Guardar este encuadre para el reporte"><span class="tool-symbol">▣</span><span>Guardar vista</span></button><span class="toolbar-divider"></span><button class="tool" id="btnFinish" disabled><span class="tool-symbol">✓</span><span>Finalizar</span></button>
+          <button class="tool" id="btnCancel"><span class="tool-symbol">×</span><span>Cancelar</span></button>
+          <button class="tool" id="btnUndo"><span class="tool-symbol">↶</span><span>Deshacer</span></button>
+          <button class="tool" id="btnDelete"><span class="tool-symbol">⌫</span><span>Borrar</span></button>
+        </div>
+        <div class="viewer" id="viewer">
+          <canvas id="panorama" aria-label="Fotografía panorámica interactiva"></canvas>
+          <canvas id="drawing" aria-label="Superficie para trazar canalizaciones"></canvas>
+          <div class="viewer-top"><span class="viewer-chip"><span class="red-dot"></span> DJI PANORAMA <span class="chip-sep">│</span> 360°</span><span class="viewer-chip dim-chip" id="heading">N 000°</span></div>
+          <button id="mobileFinish" class="mobile-finish" type="button" hidden disabled>✓ Finalizar trayectoria</button>
+          <div class="draw-instruction" id="drawInstruction" hidden><span class="instruction-dot">1</span><div><strong id="instructionTitle">Marca el primer punto</strong><span id="instructionBody">Toca o haz clic sobre el origen de la canalización.</span></div></div>
+          <div class="viewer-bottom"><div class="viewer-guide" id="hint">✥ Arrastra la fotografía para mirar alrededor. Selecciona «Trazar línea» para empezar.</div><div class="viewer-buttons"><button id="btnFront" title="Vista frontal">FRENTE</button><button id="btnMinus" title="Alejar">−</button><button id="btnPlus" title="Acercar">＋</button><button id="btnFullscreen" title="Pantalla completa">⛶</button></div></div>
+          <div id="viewerLoading" class="viewer-loading">Cargando imagen panorámica…</div>
+        </div>
+        <div class="status-line"><span id="statusText">Las longitudes provienen de las medidas realizadas en campo.</span><span id="zoomText">FOV 78°</span></div>
+        <div class="summary-row" id="quickSummary"><div class="metric"><span>RUTAS TRAZADAS</span><strong id="metricRoutes">0</strong></div><div class="metric"><span>TRAMOS MEDIDOS</span><strong id="metricMeasured">0 / 0</strong></div><div class="metric"><span>LONGITUD TOTAL REGISTRADA</span><strong id="metricTotal">0.00 <small>m</small></strong></div><div class="metric metric-action"><span>RESUMEN POR CAPA</span><button id="btnGoTotals">Ver desglose ↗</button></div></div>
+      </main>
+      <aside class="inspector" id="inspector">
+        <div class="inspector-header"><div><span class="overline">PANEL DE CONTROL</span><h2>Levantamiento eléctrico</h2></div><span class="more">•••</span></div>
+        <div class="tabs" role="tablist" aria-label="Paneles"><button data-tab="styles" class="tab active" role="tab" aria-selected="true">Dibujo</button><button data-tab="photos" class="tab" role="tab" aria-selected="false">Fotos</button><button data-tab="report" class="tab" role="tab" aria-selected="false">Reporte</button><button data-tab="layers" class="tab" role="tab" aria-selected="false">Capas</button><button data-tab="totals" class="tab" role="tab" aria-selected="false">Totales</button><button data-tab="export" class="tab" role="tab" aria-selected="false">Exportar</button></div>
+        <div class="tab-content active" data-content="styles">
+          <div class="pane-section"><div class="section-caption"><span>01</span> TIPO DE CANALIZACIÓN</div><label class="input-label" for="routeClass">Categoría de línea</label><select id="routeClass"></select><div class="helper" id="editHelp">Elige «Trazar línea». Cada toque coloca un vértice; luego «Finalizar».</div></div>
+          <div class="pane-section"><div class="section-caption"><span>02</span> ESTILO DE LÍNEA</div><div class="patterns" id="patterns"></div><div class="pair pair-gap"><div><label class="input-label" for="lineColor">Color</label><div class="color-field"><input type="color" id="lineColor" value="#ff4a4a"/><span id="colorHex">#FF4A4A</span></div></div><div><label class="input-label" for="lineWidth">Grosor independiente</label><select id="lineWidth"><option value="1">1 px · muy fino</option><option value="2">2 px · fino</option><option value="3" selected>3 px · normal</option><option value="4">4 px · medio</option><option value="6">6 px · grueso</option><option value="8">8 px · extra</option><option value="12">12 px · máximo</option></select></div></div></div>
+          <div class="pane-section"><div class="section-caption"><span>03</span> MEDIDA Y COTA</div><div class="selected-descriptor" id="selectedDescriptor">Ningún tramo seleccionado</div><label class="input-label" for="distance">Longitud real del tramo (metros)</label><div class="inline-action"><input id="distance" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Ej. 3.50"/><button id="btnMeasure" class="mini-primary">Aplicar</button></div><div class="pair pair-gap"><div><label class="input-label" for="labelSize">Tamaño del número</label><select id="labelSize"><option>12</option><option>14</option><option selected>18</option><option>22</option><option>28</option><option>36</option><option>48</option></select></div><div><label class="input-label" for="labelColor">Color de la medida</label><div class="color-field"><input type="color" id="labelColor" value="#ffffff"/><span>Cota</span></div></div></div><label class="input-label" for="labelPosition">Posición del número</label><select id="labelPosition"><option value="above">Encima del recorrido</option><option value="below">Debajo del recorrido</option><option value="center">Sobre la línea</option></select><div class="toggle-row"><span>Mostrar únicamente el número / ocultarlo</span><label class="switch"><input type="checkbox" id="showMeasurements" checked/><span></span></label></div><div class="toggle-row"><span>Mostrar vértices al editar</span><label class="switch"><input type="checkbox" id="showVertices" checked/><span></span></label></div><div class="point-actions"><button id="btnAddVertex">＋ Añadir vértice</button><button id="btnRemoveVertex">− Quitar vértice</button></div></div>
+          <div class="pane-section"><div class="section-caption"><span>04</span> ACCIONES RÁPIDAS</div><button class="wide-muted" id="quickAnnotated">⬇ Descargar foto + línea</button><div class="helper">Se exporta la fotografía verdadera detrás de las líneas, nunca un fondo negro.</div></div>
+        </div>
+        <div class="tab-content" data-content="photos"><div class="pane-section"><div class="section-caption">GALERÍA DEL PROYECTO</div><p class="helper">Añade panorámicas DJI, fotografías frontales y acercamientos. Cada fotografía conserva sus propios trazos y medidas.</p><button class="export-primary" id="btnAddPhotos">＋ Añadir fotografías</button><div class="collection" id="photoList"></div></div><div class="pane-section"><div class="section-caption">VISTAS DE UNA MISMA PANORÁMICA</div><p class="helper">Gira la foto 360° hasta el encuadre que necesites y pulsa «Guardar vista». Puedes guardar tantas vistas como quieras.</p><button class="wide-muted" id="btnSaveViewFromGallery">▣ Guardar encuadre para reporte</button></div></div>
+        <div class="tab-content" data-content="report">
+          <div class="pane-section"><div class="section-caption">LÁMINAS FOTOGRÁFICAS · REPORTE LIMPIO</div><p class="helper">Solo fotografías grandes, con trazos y número 01, 02, 03… Sin títulos ni tablas en las páginas. Cada vista mantiene su encuadre propio.</p>
+            <button class="export-primary" id="btnSaveReportView">＋ Guardar encuadre actual</button>
+            <div class="report-count" id="reportCount">0 vistas</div>
+            <div class="collection" id="reportList"></div>
+          </div>
+          <div class="pane-section"><div class="section-caption">CALIDAD Y DESCARGAS</div><label class="input-label" for="reportQuality">Ancho de imagen (exportación PNG / PDF)</label><select id="reportQuality"><option value="2560">2560 px · buena calidad</option><option value="3840" selected>3840 px · alta calidad</option><option value="5120">5120 px · máxima opción</option></select><p class="helper">PNG sin compresión con pérdida. La nitidez real depende de la resolución de la fotografía fuente. PDF con JPEG al 97% para mantener archivos manejables.</p>
+            <button id="btnAllReportZIP" class="export-primary">⬇ Todas las láminas · ZIP PNG</button>
+            <button id="btnReportFromManager" class="wide-muted">⬇ Reporte PDF · fotos grandes</button>
+          </div>
+        </div>
+        <div class="tab-content" data-content="layers"><div class="pane-section"><div class="section-caption"><span>CAPAS DEL PROYECTO</span></div><p class="helper">Apaga o enciende cada categoría sin borrar recorridos ni longitudes.</p><div id="layerList" class="layer-list"></div><div class="pane-section inner"><div class="section-caption">VISUALIZACIÓN</div><div class="toggle-row"><span>Todas las líneas</span><label class="switch"><input id="showLines" type="checkbox" checked/><span></span></label></div><div class="toggle-row"><span>Números de las medidas</span><label class="switch"><input id="showMeasures2" type="checkbox" checked/><span></span></label></div><div class="toggle-row"><span>Vértices de edición</span><label class="switch"><input id="showPoints2" type="checkbox" checked/><span></span></label></div></div></div></div>
+        <div class="tab-content" data-content="totals"><div class="pane-section"><div class="section-caption"><span>RESUMEN DE MEDIDAS</span></div><div class="total-hero"><span>TOTAL REGISTRADO</span><strong id="grandTotal">0.00 <small>m</small></strong><span class="helper">Suma únicamente medidas ingresadas en campo.</span></div><div class="total-rows" id="totalRows"></div><div class="totals-footer" id="totalsFooter">0 tramos pendientes de medir</div><button id="btnTotalsCSV" class="wide-muted">⬇ Descargar resumen CSV</button></div></div>
+        <div class="tab-content" data-content="export">
+          <div class="pane-section"><div class="section-caption">FOTO ACTIVA · EXPORTACIÓN</div><label class="input-label" for="exportResolution">Resolución de la vista</label><select id="exportResolution"><option value="1920">1920 px</option><option value="2560">2560 px</option><option value="3840" selected>3840 px</option></select><div class="toggle-row"><span>Incluir líneas visibles</span><label class="switch"><input id="exportLines" type="checkbox" checked/><span></span></label></div><div class="toggle-row"><span>Incluir números de medidas</span><label class="switch"><input id="exportMeasures" type="checkbox" checked/><span></span></label></div><div class="toggle-row"><span>Incluir puntos</span><label class="switch"><input id="exportPoints" type="checkbox"/><span></span></label></div><button class="export-primary" id="btnExportPNG">⬇ Foto + trazos (PNG)</button><button class="wide-muted" id="btnExportClean">Foto sin líneas (PNG)</button><button class="wide-muted" id="btnOriginal">Foto 360° original</button></div>
+          <div class="pane-section"><div class="section-caption">REPORTE · FOTOS GRANDES</div><button class="export-primary" id="btnReport">⬇ Reporte PDF fotográfico</button><button class="wide-muted" id="btnExportReportZIP">⬇ Todas las láminas PNG (ZIP)</button><p class="helper">Cada página contiene una fotografía grande, numerada, sin fichas técnicas. Se conserva el orden de la pestaña Reporte.</p></div>
+          <div class="pane-section"><div class="section-caption">AUTOCAD · TABLA DE DISTANCIAS</div><p class="helper">El DXF contiene únicamente la tabla editable de resumen. Las fotografías van en el PDF y en el ZIP PNG, no vinculadas en el DXF.</p><div id="cadOptions" class="cad-options"><div class="cad-options-title">Filas por capa</div><div id="cadCategories"></div><div class="cad-options-title">Columnas visibles</div><label class="cad-check"><input type="checkbox" id="cadShowRoutes" checked/> Rutas</label><label class="cad-check"><input type="checkbox" id="cadShowSegments" checked/> Tramos medidos</label><label class="cad-check"><input type="checkbox" id="cadShowPending" checked/> Tramos pendientes</label><label class="cad-check"><input type="checkbox" id="cadShowTotal" checked/> Total general</label></div><div id="cadPreview" class="cad-preview"></div><button class="export-primary" id="btnDXF">⬇ Tabla de distancias · DXF</button><button class="wide-muted" id="btnCADFromManager">⬇ Tabla DXF (mismas opciones)</button><button class="wide-muted" id="btnCSV">CSV · todos los tramos</button><p class="helper">DXF R12 compatible con AutoCAD; tabla compuesta de líneas y textos editables. No genera DWG nativo ni una entidad TABLE de AutoCAD.</p></div>
+          <div class="pane-section"><div class="section-caption">PROYECTO</div><button class="export-primary" id="btnSaveJSONAgain">⬇ Guardar proyecto editable JSON</button><button class="wide-muted" id="btnSaveAgain">⬇ Guardar respaldo ZIP</button><p class="helper">JSON y ZIP guardan las fotografías originales, trazos, medidas y láminas. Usa «Abrir JSON / ZIP» en la barra superior para continuar después.</p></div>
+        </div>
+        <div class="inspector-foot"><span class="footer-dot"></span> FV360 ENGINEERING TOOLS <span>•</span> MODO LOCAL</div>
+      </aside>
+    </div>
+  </div>
+</div>
+<div id="reportEditor" class="report-editor" hidden role="dialog" aria-modal="true" aria-label="Editar lámina fotográfica">
+  <div class="editor-window">
+    <div class="editor-head"><div><span class="overline">EDITOR DE LÁMINAS</span><h2 id="editorTitle">Encuadre fotográfico</h2></div><button id="editorClose" class="editor-exit">✕ Cerrar</button></div>
+    <div class="editor-layout"><div class="editor-canvas-holder"><canvas id="reportEditCanvas" width="960" height="540" aria-label="Vista previa de la lámina"></canvas><span id="editorProgress">Vista previa · las medidas son referencias de campo</span></div>
+      <div class="editor-settings">
+        <div class="section-caption">AJUSTE VISUAL · NO MÉTRICO</div><label class="input-label" for="editorRatio">Formato de la imagen</label><select id="editorRatio"><option value="16:9">16:9 · panorámico</option><option value="4:3">4:3 · detalle</option><option value="3:2">3:2 · fotográfico</option><option value="3:4">3:4 · vertical</option></select>
+        <label class="input-label" for="editorScale">Tamaño / zoom del encuadre: <strong id="scaleVal">100%</strong></label><input id="editorScale" type="range" min="100" max="240" value="100" step="5" />
+        <label class="input-label" for="editorX">Centrar horizontal: <strong id="xVal">0%</strong></label><input id="editorX" type="range" min="-60" max="60" value="0" step="2" />
+        <label class="input-label" for="editorY">Centrar vertical: <strong id="yVal">0%</strong></label><input id="editorY" type="range" min="-60" max="60" value="0" step="2" />
+        <div class="editor-actions"><button id="editorCenter">⌖ Centrar</button><button id="editorReset">↶ Restablecer</button></div>
+        <label class="cad-check"><input id="editorLines" type="checkbox" checked/> Mostrar líneas</label><label class="cad-check"><input id="editorMeasures" type="checkbox" checked/> Mostrar números de las medidas</label><p class="helper">El zoom y la posición afectan únicamente la presentación de la lámina. No cambian las distancias medidas en sitio.</p>
+        <button id="editorDownload" class="export-primary">⬇ Descargar esta lámina (PNG)</button><button id="editorSave" class="wide-muted">✓ Guardar ajustes</button>
+      </div></div>
+  </div></div>
+<nav class="mobile-nav" aria-label="Navegación móvil">
+  <button type="button" id="navViewer" class="mobile-nav-active"><span>◉</span>Visor</button>
+  <button type="button" id="navDraw"><span>╱</span>Trazar</button>
+  <button type="button" id="navEdit"><span>⌖</span>Editar</button>
+  <button type="button" id="navReport"><span>▧</span>Reporte</button>
+  <button type="button" id="navProjects"><span>▤</span>Proyectos</button>
+</nav>
+<div id="mobileProjectPanel" class="mobile-project-panel" hidden role="dialog" aria-modal="true" aria-labelledby="projectPanelTitle">
+  <div class="mobile-project-window">
+    <header class="mobile-project-head">
+      <div><div class="overline">BIBLIOTECA LOCAL</div><h2 id="projectPanelTitle">Mis levantamientos</h2></div>
+      <button id="closeMobileProjects" aria-label="Cerrar biblioteca" type="button">✕</button>
+    </header>
+    <div class="mobile-project-status"><span id="autoSaveState">Preparando almacenamiento…</span><span id="storageState">—</span></div>
+    <section class="fv-active-file-block" aria-label="Proyecto actual">
+      <span class="overline">PROYECTO ABIERTO EN ESTE TELÉFONO</span>
+      <strong data-fv-active-name>Nuevo levantamiento</strong>
+      <span id="fvLocalLastSave" class="fv-local-flag">Esperando el primer guardado local…</span>
+      <p data-fv-last-json class="fv-small">Aún no has exportado un archivo JSON.</p>
+    </section>
+    <div class="technician-field"><label for="technicianName">Técnico responsable del dispositivo</label><input id="technicianName" type="text" maxlength="75" placeholder="Nombre del técnico (opcional)" autocomplete="name" /></div>
+    <div class="mobile-project-actions">
+      <button id="createMobileProject" type="button">＋ Nuevo proyecto</button>
+      <button id="saveMobileNow" type="button">✓ Guardar ahora</button>
+      <button id="openMobileImport" type="button">↥ Importar JSON / ZIP</button>
+      <button type="button" class="fv-project-action" data-fv-export-json>⬇ Guardar archivo JSON</button>
+      <button type="button" class="fv-project-action" data-fv-export-zip>⬇ Exportar ZIP</button>
+    </div>
+    <div id="mobileProjectsList" class="mobile-project-list"></div>
+    <div class="mobile-project-advice"><strong>¿Dónde están mis proyectos?</strong><br/>Las tarjetas de arriba son el historial guardado en este dispositivo. El proyecto abierto está marcado «ABIERTO» y se guarda automáticamente. Para guardar un archivo independiente, pulsa «Guardar archivo JSON» o «Exportar ZIP».</div>
+    <details class="fv-location-details"><summary>Ubicación de archivos y cómo elegir carpeta</summary><p data-fv-local-location-help></p><p data-fv-file-location-help></p><p>Para abrir un respaldo, toca «Importar JSON / ZIP» y elige el archivo en Archivos o en el selector de tu teléfono.</p></details>
+    <button id="mobileInstall" class="mobile-install" type="button">Instalar FV360 en este dispositivo</button>
+    <div id="installHelp" class="install-help" hidden></div>
+  </div>
+</div>
+<div id="offlineNotice" class="offline-notice" hidden>Sin conexión · puedes seguir trabajando en proyectos guardados.</div>
+<input type="hidden" id="reportSubtitle" value="Reporte fotográfico"/><textarea id="reportNotes" hidden></textarea>
+<input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp,image/*" multiple hidden />
+<input type="file" id="projectInput" accept=".zip,.json,application/json,application/zip" hidden />
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="archive.js"></script>
+<script src="table-dxf-r12.js"></script>
+<script src="app.js"></script>
+<script src="mobile.js"></script>
+<script src="project-files.js"></script>
+</body>
+</html>

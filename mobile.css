@@ -1,0 +1,49 @@
+/* FV360 Mobile - Dark graphite, compact tools and tactile ergonomics. */
+:root{--mob-night:#111317;--mob-line:#353940;--mob-panel:#22262c;--mob-muted:#a7aeb9}
+.mobile-nav{display:none}
+.mobile-project-panel{position:fixed;inset:0;background:#030507cc;z-index:115;display:grid;place-items:center;padding:16px;overflow:auto}
+.mobile-project-panel[hidden]{display:none!important}
+.mobile-modal-open{overflow:hidden}
+.mobile-project-window{background:#1b1e23;color:#eff1f4;border:1px solid #444952;box-shadow:0 20px 65px #000b;border-radius:16px;width:min(650px,100%);max-height:95dvh;display:flex;flex-direction:column;overflow:hidden}
+.mobile-project-head{display:flex;align-items:center;justify-content:space-between;padding:20px;border-bottom:1px solid #353b43;gap:12px}
+.mobile-project-head h2{margin:5px 0 0;font-size:20px}.mobile-project-head button{background:#333941;color:#fff;border:0;border-radius:10px;padding:11px 14px}
+.mobile-project-status{display:flex;justify-content:space-between;gap:10px;color:#c7cdd8;font-size:11px;padding:11px 18px;background:#24282e}
+.mobile-project-actions{display:flex;gap:8px;flex-wrap:wrap;padding:13px 18px}.mobile-project-actions button{flex:1;min-width:120px;background:#333941;color:#e6ebf1;border:1px solid #555b63;border-radius:9px;padding:12px 7px;font-weight:650;font-size:11px}
+.mobile-project-actions #createMobileProject{background:#e9edf2;color:#13161a;border:0}
+.mobile-project-list{overflow-y:auto;padding:0 18px;min-height:110px;max-height:48vh}
+.mp-item{padding:14px;margin:8px 0;border:1px solid #424850;border-radius:11px;background:#242930}.mp-active{border-color:#a4adb9}.mp-title{font-weight:700;font-size:14px;line-height:1.4}.mp-current{display:inline-block;margin-left:8px;color:#101215;background:#d9e0e8;font-size:9px;padding:4px 7px;border-radius:4px}.mp-desc{color:#a8b1bd;font-size:11px;margin-top:6px}.mp-controls{display:flex;gap:9px;margin-top:12px}.mp-controls button{border-radius:7px;background:#414751;color:#fff;border:1px solid #56606c;padding:9px 16px}.mp-controls button:disabled{opacity:.4}.mp-empty{color:#a9afbb;font-size:12px;padding:18px 8px}
+.mobile-project-advice{font-size:11px;line-height:1.65;color:#acb4be;margin:8px 18px;padding:12px;background:#282c33;border-left:2px solid #aab3be;border-radius:5px}.mobile-install{margin:4px 18px 16px;background:#e4e9ef;color:#11161a;border:0;border-radius:9px;padding:13px;font-weight:750}.install-help{margin:0 18px 17px;color:#d5dbe3;font-size:12px;line-height:1.6}
+.offline-notice{position:fixed;bottom:76px;right:12px;z-index:65;background:#32373e;border:1px solid #6b737e;border-radius:9px;padding:11px 14px;color:#f0f2f5;font-size:11px;box-shadow:0 5px 25px #0008}
+@media(max-width:900px){.viewer{height:min(57dvh,690px)}.inspector{scroll-margin-top:15px}}
+@media(max-width:620px){
+ body{padding-bottom:calc(74px + env(safe-area-inset-bottom,0px));overscroll-behavior-y:contain}
+ .topbar{position:sticky;top:0;z-index:35;padding-top:max(9px,env(safe-area-inset-top,0px));background:#191c20}
+ .header-actions{max-width:80%;overflow-x:auto;scrollbar-width:none}.brandline strong{font-size:15px}
+ .action-btn{min-height:37px;white-space:nowrap}.header-actions #btnSave,.header-actions #btnSaveJSON{display:none}
+ #btnProjectsMobile{background:#e8edf2;color:#16191e;font-weight:720}
+ .viewer{height:57dvh;min-height:345px;max-height:700px;touch-action:none;scroll-margin-top:65px}
+ .toolbar{position:sticky;top:57px;z-index:31;background:#262930}
+ .tool{min-height:45px}.tool span:last-child{font-size:11px}
+ .tabs{overflow-x:auto;display:flex;white-space:nowrap;scrollbar-width:none}.tab{flex:none;padding:15px 10px;min-width:67px}
+ .mobile-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;bottom:0;left:0;right:0;z-index:64;min-height:calc(65px + env(safe-area-inset-bottom,0px));padding-bottom:env(safe-area-inset-bottom,0px);background:#1b1e23;border-top:1px solid #4a4f57;box-shadow:0 -10px 35px #0007}
+ .mobile-nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:none;border:0;color:#b1bac5;font-size:10px;font-weight:600;padding:6px 2px;min-width:0}
+ .mobile-nav button span{font-size:22px;color:#e4eaf0;line-height:1}.mobile-nav button:active{background:#303640}.mobile-nav .mobile-nav-active{color:#fff}
+ .mobile-project-panel{padding:0;align-items:end}.mobile-project-window{max-height:93dvh;border-radius:16px 16px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}
+ .offline-notice{bottom:calc(76px + env(safe-area-inset-bottom,0px));left:12px;right:12px;text-align:center}
+ .toast{bottom:calc(76px + env(safe-area-inset-bottom,0px));width:calc(100% - 25px);text-align:center}
+ .inspector-foot{padding-bottom:15px}
+}
+@media(hover:none){button{touch-action:manipulation}.collection-actions button,.point-actions button,.wide-muted,.export-primary{min-height:43px}.inspector select,.inspector input[type=number],.report-card input,.report-card textarea{font-size:16px!important}}
+
+.technician-field{padding:10px 18px 1px;display:flex;flex-direction:column;gap:7px}.technician-field label{color:#b9c2cf;font-size:11px}.technician-field input{border:1px solid #555d67;background:#252a30;color:#f1f4f7;border-radius:8px;padding:12px;font-size:16px}
+
+.mobile-finish{display:none}
+@media(max-width:620px){.mobile-finish:not([hidden]){display:block;position:absolute;right:10px;bottom:61px;z-index:12;border:0;background:#e5ebf2;color:#10151b;border-radius:9px;padding:13px 16px;font-size:12px;font-weight:780;box-shadow:0 6px 20px #000a}.mobile-finish:disabled{opacity:.5}}
+
+/* FV360: claridad en el historial y en la exportación de proyectos. */
+.fv-active-file-block{display:flex;flex-direction:column;gap:6px;margin:12px 18px 2px;background:#222831;border:1px solid #54616f;border-radius:11px;padding:13px 14px}
+.fv-active-file-block strong{font-size:17px;color:#f4f7fa;overflow-wrap:anywhere}.fv-local-flag{font-size:12px;color:#bde6c8}.fv-small{font-size:11px;line-height:1.5;margin:2px 0;color:#b8c1cd;overflow-wrap:anywhere}
+.mobile-project-actions button.fv-project-action{background:#343c48;color:#fff;border-color:#788494}
+.fv-location-details{background:#272c33;border:1px solid #444e59;border-radius:10px;color:#c4cdd9;margin:4px 18px 18px;padding:10px 12px;font-size:12px;line-height:1.6}
+.fv-location-details summary{cursor:pointer;color:#e4ebf3;font-weight:650}.fv-location-details p{margin:10px 0 0}
+.mp-item.mp-active{background:#303941;border-color:#9eb4c9}.mp-item.mp-active .mp-desc{color:#c4d6e2}

@@ -1,0 +1,26 @@
+FV360 STUDIO MOBILE v1 - PAQUETE PARA PUBLICAR (SIN FOTO DE EJEMPLO)
+===================================================================
+
+1. Descomprime esta carpeta. Debe contener index.html, mobile.js, sw.js,
+   manifest.webmanifest, app.js, mobile.css, styles.css y la carpeta icons.
+2. Publica TODOS los archivos juntos en la raiz de una pagina HTTPS.
+   Ejemplo: Netlify Drop (arrastra la carpeta extraida) o GitHub Pages.
+3. Abre la URL HTTPS en Safari iPhone o Chrome Android.
+4. iPhone: Compartir > Anadir a pantalla de inicio.
+   Android: menu del navegador > Instalar aplicacion.
+5. Entra una vez online y espera a que se cargue. Prueba despues sin internet.
+6. Dentro de FV360, abre Proyectos > Nuevo proyecto, anade fotografias,
+   dibuja trayectorias y guarda. Exporta ZIP para respaldo e intercambio.
+
+Este paquete NO lleva la fotografia DJI que compartiste para pruebas.
+No requiere backend ni cuentas. La URL de la PWA no tiene autenticacion:
+si alguien conoce la URL puede abrir la interfaz, pero NO tiene acceso a los
+proyectos guardados localmente en tus telefonos.
+
+ATENCION: cada persona tiene su biblioteca local. No existe sincronizacion
+colaborativa. No borres el almacenamiento del navegador sin exportar respaldo
+ZIP. Las fotografias muy grandes pueden agotar memoria en telefono.
+
+Una PWA no se instala como APK o IPA. Requiere publicar en HTTPS; si abres
+index.html desde la carpeta el autoguardado puede funcionar segun navegador,
+pero el modo instalable/offline no estara garantizado.

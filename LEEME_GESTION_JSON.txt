@@ -1,0 +1,19 @@
+FV360 Studio Mobile - mejora de gestion de proyectos
+
+1. Abre Proyectos desde la barra inferior o superior.
+2. Comprueba PROYECTO ABIERTO y la hora de guardado local.
+3. 'Guardar archivo JSON' crea una copia editable con las fotografias, trazos, medidas y vistas.
+4. 'Exportar ZIP' crea el respaldo completo con fotos en archivos separados.
+5. 'Importar JSON / ZIP' abre el selector de archivos del telefono y crea otra entrada de proyecto local, sin borrar la anterior.
+6. La biblioteca muestra el proyecto ABIERTO, fecha del ultimo autoguardado e identificador corto para distinguir proyectos repetidos.
+
+IMPORTANTE SOBRE CARPETAS
+- El autoguardado de la PWA permanece en el almacenamiento privado del navegador y no puede moverse a una carpeta elegida.
+- iPhone: en la ventana Compartir, si esta disponible, selecciona Guardar en Archivos y la carpeta (En mi iPhone o iCloud Drive); si se descarga directamente, busca en Archivos > Descargas.
+- Android: usa Compartir si aparece o busca el JSON en Descargas.
+- PC: Chrome/Edge pueden ofrecer un selector de ubicacion al guardar JSON. En otros navegadores, se usa la carpeta de Descargas configurada en el navegador.
+- Antes de actualizar GitHub Pages o limpiar datos del navegador exporta tus proyectos a JSON/ZIP y verifica que los archivos existan.
+
+ACTUALIZACION GITHUB
+Sube los archivos de esta carpeta a la raiz del repositorio, reemplazando los anteriores. Incluye el nuevo project-files.js y el nuevo sw.js. No agregues fotografias ni proyectos privados al repositorio.
+No hace falta cambiar la URL de GitHub Pages. Espera a que termine la publicacion y vuelve a cargar FV360; puede ser necesario cerrar y reabrir la PWA para actualizar el cache.

@@ -1,0 +1,23 @@
+FV360 MOBILE PWA - CORRECCION DE FOTOS PLANAS (GitHub Pages)
+==========================================================
+CAMBIOS
+- Fotos convencionales verticales/horizontales respetan su proporcion de origen.
+- Dibujo y edicion de vertices coinciden en la imagen exportada.
+- PNG de fotos planas en su aspecto original; reporte permite 3:4 vertical.
+- Aviso inicial de trazado mucho mas pequeno, sin ayuda inferior superpuesta al dibujar.
+- No hay cambios de cuentas, biblioteca local, JSON/ZIP, capas, reportes ni herramientas 360.
+- Service worker actualizado para que GitHub Pages pueda entregar la nueva version.
+
+ACTUALIZAR TU PWA EN GITHUB
+1. Exporta primero un respaldo ZIP de los proyectos importantes desde cada telefono.
+2. Abre el ZIP; entra a la carpeta FV360_Mobile_Para_Publicar.
+3. Sube/reemplaza TODOS sus archivos en la RAIZ de tu repositorio GitHub,
+   incluida la carpeta icons; NO subas la carpeta contenedora ni fotografias de clientes.
+4. Espera a que GitHub Pages termine el despliegue.
+5. En iPhone y Android, cierra FV360 y vuelve a abrirla con conexion.
+   Puede requerir recargar la pagina para que el Service Worker actualice los archivos.
+6. NO borres datos del sitio, cache de almacenamiento ni desinstales la app para forzar la
+   actualizacion: ello puede eliminar proyectos guardados en el telefono.
+7. Prueba con una fotografia vertical, dibuja dos puntos y descarga el PNG.
+
+PWA sin fotos privadas en el repositorio. Tus proyectos siguen locales en cada telefono.
